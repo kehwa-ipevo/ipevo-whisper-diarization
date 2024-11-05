@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 UPDATE_CHECK_URL = "http://127.0.0.1:8080/v1/update_check"
 
-DOWNLOAD_URL = "http://127.0.0.1:8080/v1/download2"
+DOWNLOAD_URL = "http://127.0.0.1:8080/v1/download"
 
 
 def get_current_version() -> str:       
