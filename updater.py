@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 UPDATE_CHECK_URL = "http://127.0.0.1:8080/v1/update_check"
 
-DOWNLOAD_URL = "http://127.0.0.1:8080/v1/download"
+DOWNLOAD_URL = "http://127.0.0.1:8080/v1/download2"
 
 
 def get_current_version() -> str:       
@@ -41,8 +41,8 @@ def check_for_updates() -> bool:
             print(f"A new version of the application is available: {latest_version}")
 
             ## update json
-            # with open("version.json", "w") as f:
-            #     json.dump({"version": latest_version}, f, indent=4)
+            with open("version.json", "w") as f:
+                json.dump({"version": latest_version}, f, indent=4)
 
             return True
     return False
@@ -54,13 +54,13 @@ def update():
     with requests.get(DOWNLOAD_URL) as response:
         r = response
         r.raise_for_status()
-        print(f"Response headers: {r.headers}")
         size = int(r.headers["Content-Length"])
         chunk_size = 8192
 
         if response.status_code == 200:
-            tmp_file_name = "./tmp_file"
-            target = "./dist/diarize"
+            base_path = os.path.join(sys.argv[0])
+            tmp_file_name = os.path.join(base_path, "./tmp_file")
+            target = os.path.join(base_path, "./diarize")
             n_chunks = (size + chunk_size - 1) // chunk_size
             with open(tmp_file_name, "wb") as f:
                 for chunk in tqdm(
@@ -74,7 +74,10 @@ def update():
             # with open(tmp_file_name, "wb") as f:
             #     f.write(base64.b64decode(response.json()['message']))
             # shutil.unpack_archive(tmp_file_name)
-            # os.remove(tmp_file_name)            
+            os.chmod(tmp_file_name, 0o755)
+            print(f"move tmp file from {tmp_file_name} to {target}")
+            shutil.move(tmp_file_name, target)
+            # os.remove(tmp_file_name)
             print("Update downloaded successfully.")
 
         else:   

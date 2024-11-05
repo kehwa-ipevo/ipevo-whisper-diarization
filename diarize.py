@@ -100,8 +100,8 @@ language = process_language_arg(args.language, args.model_name)
 
 
 if args.check_update:
-    from helpers import check_update
-    check_update()
+    from updater import update
+    update()
     exit(0)
 
 if args.stemming:
