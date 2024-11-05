@@ -89,8 +89,20 @@ parser.add_argument(
     help="if you have a GPU use 'cuda', otherwise 'cpu'",
 )
 
+parser.add_argument(
+    "--check-update",
+    action="store_true",
+    help="Check for updates app update",
+)
+
 args = parser.parse_args()
 language = process_language_arg(args.language, args.model_name)
+
+
+if args.check_update:
+    from helpers import check_update
+    check_update()
+    exit(0)
 
 if args.stemming:
     # Isolate vocals from the rest of the audio
