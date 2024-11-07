@@ -173,7 +173,7 @@ def main(args: argparse.Namespace):
 
         words_list = list(map(lambda x: x["word"], wsm))
 
-        labled_words = punct_model.predict(words_list, chunk_size=230)
+        labled_words = punct_model.predict(words_list, chunk_size=args.chunk_size)
 
         ending_puncts = ".?!"
         model_puncts = ".,;:!?"
@@ -276,6 +276,13 @@ def get_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--chunk-size",
+        type= int,
+        default= 100,
+        help="chunk size"
+    )
+
+    parser.add_argument(
         "--check-update",
         action="store_true",
         help="Check for updates app update",
@@ -283,7 +290,7 @@ def get_args() -> argparse.Namespace:
 
     parser.add_argument(
         "--version",
-        action="version",
+        action="store_true",
         help="show current app version"
     )
 
