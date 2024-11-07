@@ -8,10 +8,15 @@ import base64
 import logging
 from tqdm import tqdm
 
-UPDATE_CHECK_URL = "http://127.0.0.1:8080/v1/update_check"
+ADDRESS = "127.0.0.1"
+PORT = "8080"
+API_VERSION = "v1"
 
-DOWNLOAD_URL = "http://127.0.0.1:8080/v1/download"
+UPDATE_CHECK_URL = f"http://{ADDRESS}:{PORT}/{API_VERSION}/version"
 
+DOWNLOAD_URL = f"http://{ADDRESS}:{PORT}/{API_VERSION}/download"
+
+VERSION = "0.1.0"
 
 def get_current_version() -> str:       
     """ get current version of the application
@@ -19,12 +24,7 @@ def get_current_version() -> str:
     Returns:
         str: current version
     """
-    try: 
-        with open("version.json", "r") as f:
-            version = json.load(f)["version"]
-    except:
-        version = "0.0.0"
-    return version
+    return VERSION
 
 
 def check_for_updates() -> bool:
