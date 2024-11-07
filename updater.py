@@ -71,13 +71,9 @@ def update():
                 ):
                     f.write(chunk)
 
-            # with open(tmp_file_name, "wb") as f:
-            #     f.write(base64.b64decode(response.json()['message']))
-            # shutil.unpack_archive(tmp_file_name)
             os.chmod(tmp_file_name, 0o755)
             print(f"move tmp file from {tmp_file_name} to {target}")
             shutil.move(tmp_file_name, target)
-            # os.remove(tmp_file_name)
             print("Update downloaded successfully.")
 
         else:   
