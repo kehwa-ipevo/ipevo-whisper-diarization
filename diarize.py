@@ -95,9 +95,19 @@ parser.add_argument(
     help="Check for updates app update",
 )
 
+parser.add_argument(
+    "--version",
+    action="version",
+    help="show current app version"
+)
+
 args = parser.parse_args()
 language = process_language_arg(args.language, args.model_name)
 
+if args.version:
+    from updater import get_current_version
+    print(f"current version: {get_current_version()}")
+    exit(0)
 
 if args.check_update:
     from updater import update
