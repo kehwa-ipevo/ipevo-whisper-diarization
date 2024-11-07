@@ -40,9 +40,14 @@ def get_current_version() -> str:
     Returns:
         str: current version
     """
-    return VERSION
+    try: 
+        with open("version.json", "r") as f:
+            version = json.load(f)["version"]
+    except:
+        version = "0.0.0"
+    return version
 
-@request_exception_handler
+
 def check_for_updates() -> bool:
     """ check if there is an update available
 
