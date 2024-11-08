@@ -53,7 +53,7 @@ def update():
     print("Downloading update...")
     with requests.get(DOWNLOAD_URL) as response:
         r = response
-        r.raise_for_status()
+        # r.raise_for_status()
         size = int(r.headers["Content-Length"])
         chunk_size = 8192
 
