@@ -18,6 +18,22 @@ DOWNLOAD_URL = f"http://{ADDRESS}:{PORT}/{API_VERSION}/download"
 
 VERSION = "0.1.0"
 
+def request_exception_handler(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except requests.exceptions.ConnectionError:
+            print("Error: Unable to connect to the server. Please check your network or the server URL.")
+        except requests.exceptions.Timeout:
+            print("Error: The request timed out. The server may be slow, or the network may be congested.")
+        except requests.exceptions.HTTPError as http_err:
+            print(f"HTTP error occurred: {http_err}")
+        except requests.exceptions.RequestException as req_err:
+            print(f"An error occurred: {req_err}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+    return wrapper        
+
 def get_current_version() -> str:       
     """ get current version of the application
 
@@ -26,14 +42,14 @@ def get_current_version() -> str:
     """
     return VERSION
 
-
+@request_exception_handler
 def check_for_updates() -> bool:
     """ check if there is an update available
 
     Returns:
         bool: True if there is an update, False otherwise
     """
-    current_version = get_current_version()    
+    current_version = get_current_version()
     response = requests.get(VERSION_URL)
     if response.status_code == 200:
         latest_version = response.json()["message"]
@@ -43,10 +59,10 @@ def check_for_updates() -> bool:
             ## update json
             with open("version.json", "w") as f:
                 json.dump({"version": latest_version}, f, indent=4)
-
             return True
     return False
 
+@request_exception_handler
 def update(): 
     """ download the latest version of the application
     """
@@ -76,7 +92,7 @@ def update():
             shutil.move(tmp_file_name, target)
             print("Update downloaded successfully.")
 
-        else:   
+        else:
             print("Failed to download update.")
 
 
