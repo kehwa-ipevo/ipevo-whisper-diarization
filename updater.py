@@ -12,7 +12,7 @@ ADDRESS = "127.0.0.1"
 PORT = "8080"
 API_VERSION = "v1"
 
-UPDATE_CHECK_URL = f"http://{ADDRESS}:{PORT}/{API_VERSION}/version"
+VERSION_URL = f"http://{ADDRESS}:{PORT}/{API_VERSION}/version"
 
 DOWNLOAD_URL = f"http://{ADDRESS}:{PORT}/{API_VERSION}/download"
 
@@ -34,7 +34,7 @@ def check_for_updates() -> bool:
         bool: True if there is an update, False otherwise
     """
     current_version = get_current_version()    
-    response = requests.get(UPDATE_CHECK_URL)
+    response = requests.get(VERSION_URL)
     if response.status_code == 200:
         latest_version = response.json()["message"]
         if version.parse(latest_version) > version.parse(current_version):
