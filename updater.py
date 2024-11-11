@@ -47,7 +47,7 @@ def get_current_version() -> str:
         version = "0.0.0"
     return version
 
-
+@request_exception_handler
 def check_for_updates() -> bool:
     """ check if there is an update available
 
