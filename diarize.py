@@ -2,7 +2,7 @@ import argparse
 import logging
 import os
 import re
-
+import uuid
 import faster_whisper
 import torch
 import torchaudio
@@ -151,7 +151,8 @@ def main(args: argparse.Namespace):
 
     # convert audio to mono for NeMo combatibility
     ROOT = os.getcwd()
-    temp_path = os.path.join(ROOT, "temp_outputs")
+    u = uuid.uuid1()
+    temp_path = os.path.join(ROOT, f"temp_outputs_{u.__str__()}")
     os.makedirs(temp_path, exist_ok=True)
     torchaudio.save(
         os.path.join(temp_path, "mono_file.wav"),
