@@ -1,5 +1,6 @@
 wget
 nemo_toolkit[asr]==2.0.0rc0
+git+https://github.com/kehwa-ipevo/NeMo.git@feature_fix_data_type
 nltk
 git+https://github.com/SYSTRAN/faster-whisper.git
 git+https://github.com/MahmoudAshraf97/demucs.git
@@ -11,3 +12,5 @@ pyinstaller
 huggingface_hub==0.23.3
 
 ctranslate2==4.4.0
+
+numpy==1.26.1
