@@ -1,9 +1,14 @@
 #!/bin/bash
 
 # 設置環境變數
-CONDA_ENV_PATH="/home/ipevox0244/anaconda3/envs/test"
-PYTHON_LIB_PATH="$CONDA_ENV_PATH/lib/python3.10/site-packages"
-PYTHON_LIB_DYNLOAD="$CONDA_ENV_PATH/lib/python3.10/lib-dynload"
+PYTHON_PATH=$(which python)
+ENV_PATH==$(dirname $(dirname "$python_path"))
+
+PYTHON_VERSION=$(python --version)
+PYTHON_VERSION=$(echo $PYTHON_VERSION | cut -d " " -f 2 | cut -d "." -f 1,2)
+
+PYTHON_LIB_PATH="$ENV_PATH/lib/$PYTHON_VERSION/site-packages"
+PYTHON_LIB_DYNLOAD="$ENV_PATH/lib/$PYTHON_VERSION/lib-dynload"
 
 # PyInstaller 命令
 pyinstaller \
