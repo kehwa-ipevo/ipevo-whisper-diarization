@@ -6,6 +6,7 @@ import uuid
 import faster_whisper
 import torch
 import torchaudio
+import signal
 
 from ctc_forced_aligner import (
     generate_emissions,
@@ -34,6 +35,7 @@ from helpers import (
 )
 
 mtypes = {"cpu": "int8", "cuda": "float16"}
+TEMP_PATH = ""
 
 from functools import wraps
 import time
@@ -153,6 +155,8 @@ def main(args: argparse.Namespace):
     ROOT = os.getcwd()
     u = uuid.uuid1()
     temp_path = os.path.join(ROOT, f"temp_outputs_{u.__str__()}")
+    global TEMP_PATH
+    TEMP_PATH = temp_path
     os.makedirs(temp_path, exist_ok=True)
     torchaudio.save(
         os.path.join(temp_path, "mono_file.wav"),
@@ -263,7 +267,7 @@ def get_args() -> argparse.Namespace:
     parser.add_argument(
         "--whisper-model",
         dest="model_name",
-        default="medium.en",
+        default="base",
         help="name of the Whisper model to use",
     )
 
@@ -315,7 +319,29 @@ def get_args() -> argparse.Namespace:
     return args
 
 
+import signal
+import time
+
+# 定義處理函数
+def signal_handler(sig, frame):
+
+    print("catch Ctrl+C (SIGINT)")
+    
+    ## remove temp files
+    temp_path = "./temp_outputs"
+    if os.path.exists(temp_path):
+        cleanup(temp_path)    
+    
+    if TEMP_PATH and os.path.exists(TEMP_PATH):
+        cleanup(TEMP_PATH)
+    exit(0)
+
+
 if __name__ == "__main__":
+
+    # 設置信號處理器
+    signal.signal(signal.SIGINT, signal_handler)
+
     ## get args
     args = get_args()
 
