@@ -269,7 +269,7 @@ def get_args() -> argparse.Namespace:
     parser.add_argument(
         "--whisper-model",
         dest="model_name",
-        default="medium.en",
+        default="base",
         help="name of the Whisper model to use",
     )
 
@@ -314,7 +314,29 @@ def get_args() -> argparse.Namespace:
     return args
 
 
+import signal
+import time
+
+# 定義處理函数
+def signal_handler(sig, frame):
+
+    print("catch Ctrl+C (SIGINT)")
+    
+    ## remove temp files
+    temp_path = "./temp_outputs"
+    if os.path.exists(temp_path):
+        cleanup(temp_path)    
+    
+    if TEMP_PATH and os.path.exists(TEMP_PATH):
+        cleanup(TEMP_PATH)
+    exit(0)
+
+
 if __name__ == "__main__":
+
+    # 設置信號處理器
+    signal.signal(signal.SIGINT, signal_handler)
+
     ## get args
     args = get_args()
 
