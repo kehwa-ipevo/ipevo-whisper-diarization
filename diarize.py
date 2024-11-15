@@ -7,7 +7,7 @@ import faster_whisper
 import torch
 import torchaudio
 import signal
-
+from  typing import List, Dict, Any
 from ctc_forced_aligner import (
     generate_emissions,
     get_alignments,
@@ -221,6 +221,8 @@ def main(args: argparse.Namespace):
 
     wsm = get_realigned_ws_mapping_with_punctuation(wsm)
     ssm = get_sentences_speaker_mapping(wsm, speaker_ts)
+    if info.language in ["ja", "zh"]:
+        ssm = merge_text(ssm)
 
     with open(f"{os.path.splitext(args.audio)[0]}.txt", "w", encoding="utf-8-sig") as f:
         get_speaker_aware_transcript(ssm, f)
@@ -230,6 +232,28 @@ def main(args: argparse.Namespace):
 
     cleanup(temp_path)
 
+
+def merge_text(ssm: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """merge jpn, chi text
+
+    Args:
+        ssm (List[Dict[str, Any]]): list of sentence speaker mapping
+
+    Returns:
+        List[Dict[str, Any]]: merged list
+    """
+    print(f"ssm: {ssm}")
+    for ss in ssm:
+        split_text = [x for x in ss["text"].split(" ") if len(x)]
+        tmp = ""
+        for s in split_text:
+            if len(s) == 1:
+                tmp += s
+            else:
+                tmp += " " + s + " "
+        ss["text"] = tmp.strip()
+    print(f"ssm: {ssm}")
+    return ssm
 
 def get_args() -> argparse.Namespace:
     """get arguments
