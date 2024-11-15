@@ -127,7 +127,9 @@ def main(args: argparse.Namespace):
 
     emissions, stride = generate_emissions(
         alignment_model,
-        audio_waveform.to(alignment_model.dtype).to(alignment_model.device),
+        torch.from_numpy(audio_waveform)
+        .to(alignment_model.dtype)
+        .to(alignment_model.device),
         batch_size=args.batch_size,
     )
 
@@ -160,7 +162,7 @@ def main(args: argparse.Namespace):
     os.makedirs(temp_path, exist_ok=True)
     torchaudio.save(
         os.path.join(temp_path, "mono_file.wav"),
-        audio_waveform.cpu().unsqueeze(0).float(),
+        torch.from_numpy(audio_waveform).unsqueeze(0).float(),
         16000,
         channels_first=True,
     )
