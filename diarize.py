@@ -242,7 +242,6 @@ def merge_text(ssm: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     Returns:
         List[Dict[str, Any]]: merged list
     """
-    print(f"ssm: {ssm}")
     for ss in ssm:
         split_text = [x for x in ss["text"].split(" ") if len(x)]
         tmp = ""
@@ -251,8 +250,7 @@ def merge_text(ssm: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 tmp += s
             else:
                 tmp += " " + s + " "
-        ss["text"] = tmp.strip()
-    print(f"ssm: {ssm}")
+        ss["text"] = tmp.strip().replace("  "," ")
     return ssm
 
 def get_args() -> argparse.Namespace:
