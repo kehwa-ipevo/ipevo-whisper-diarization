@@ -327,7 +327,7 @@ def get_args() -> argparse.Namespace:
 
     parser.add_argument(
         "--version",
-        action="version",
+        action="store_true",
         help="show current app version"
     )
 
