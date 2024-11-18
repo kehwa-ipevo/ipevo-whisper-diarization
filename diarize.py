@@ -320,6 +320,13 @@ def get_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--chunk-size",
+        type=int,
+        default=100,
+        help="chunk size for punct_model",
+    )
+
+    parser.add_argument(
         "--check-update",
         action="store_true",
         help="Check for updates app update",
