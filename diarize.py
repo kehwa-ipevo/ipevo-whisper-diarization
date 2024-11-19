@@ -7,7 +7,8 @@ import faster_whisper
 import torch
 import torchaudio
 import signal
-from  typing import List, Dict, Any
+from typing import List, Dict, Any
+from utils import timeit
 from ctc_forced_aligner import (
     generate_emissions,
     get_alignments,
@@ -36,20 +37,6 @@ from helpers import (
 
 mtypes = {"cpu": "int8", "cuda": "float16"}
 TEMP_PATH = ""
-
-from functools import wraps
-import time
-
-def timeit(func):
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter()
-        total_time = end_time - start_time
-        print(f'Function {func.__name__}{args} {kwargs} Took {total_time:.4f} seconds')
-        return result
-    return timeit_wrapper
 
 @timeit
 def main(args: argparse.Namespace):
@@ -341,10 +328,6 @@ def get_args() -> argparse.Namespace:
     args = parser.parse_args()
 
     return args
-
-
-import signal
-import time
 
 # 定義處理函数
 def signal_handler(sig, frame):
